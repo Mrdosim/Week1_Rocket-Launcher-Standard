@@ -14,15 +14,22 @@ public class RocketController : MonoBehaviour
         _energySystem = GetComponent<EnergySystem>();
         _rocketMovement = GetComponent<RocketMovement>();
     }
-
     // TODO : OnMove 구현
-    // private void OnMove...
+    private void OnMove(InputAction.CallbackContext context)
+    {
+        Vector2 input = context.ReadValue<Vector2>();
+        if (input != null)
+        {
+            _movementDirection = new Vector2(input.x, input.y);
+            Debug.Log($"Unity_Evets : {input.magnitude}");
+        }
+    }
 
 
     // TODO : OnBoost 구현
-    // private void OnBoost...
-    private void OnBoost(InputValue value)
+    private void OnBoost(InputAction.CallbackContext context)
     {
-        _rocketMovement.ApplyBoost(value.isPressed);
+        bool isPressed = context.ReadValue<float>() > 0;
+        _rocketMovement.ApplyBoost(isPressed);
     }
 }
