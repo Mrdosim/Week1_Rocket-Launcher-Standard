@@ -4,36 +4,44 @@ using UnityEngine.InputSystem;
 public class RocketMovement : MonoBehaviour
 {
     private Rigidbody2D _rb2d;
-    private bool _isBoosted;
     private readonly float SPEED = 5f;
     private readonly float ROTATIONSPEED = 0.01f;
+    private float _currentSpeed;
 
     private void Awake()
     {
         _rb2d = GetComponent<Rigidbody2D>();
+        _currentSpeed = SPEED;
     }
     
     public void ApplyMovement(Vector2 direction)
     {
-        // TODO : 회전을 적용하고 이동을 적용함 -> 이에 대한 구현을 아래에서 진행할 것
-        // Rotate(direction);
-        // Move();
+        if (direction != Vector2.zero)
+        {
+            Rotate(direction);
+            Move();
+        }
+        else
+        {
+            _rb2d.velocity = Vector2.zero; // 방향 입력이 없으면 정지
+        }
     }
 
     public void ApplyBoost(bool isPressed)
     {
-        _isBoosted = isPressed;
+        _currentSpeed = isPressed ? SPEED * 3 : SPEED;
     }
 
     private void Rotate(Vector2 direction)
     {
-        // TODO : 완만한 회전을 적용함
-        
+        Quaternion currentRotation = transform.rotation;
+        Quaternion targetRotation = Quaternion.Euler(0, 0, Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f);
+        transform.rotation = Quaternion.Slerp(currentRotation, targetRotation, ROTATIONSPEED);
     }
 
     private void Move()
     {
         // TODO : 움직임 적용
-        
+        _rb2d.velocity = transform.up * _currentSpeed;
     }
 }
