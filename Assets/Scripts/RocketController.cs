@@ -6,7 +6,6 @@ public class RocketController : MonoBehaviour
     private EnergySystem _energySystem;
     private RocketMovement _rocketMovement;
 
-    private bool _isMoving;
     private Vector2 _movementDirection = Vector2.zero;
     private bool _isBoosted;
 
